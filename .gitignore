@@ -1,0 +1,32 @@
+# --- Python / Poetry ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+
+# --- Environment / secrets ---
+.env
+.env.*
+
+# --- OS ---
+.DS_Store
+
+# --- Editors ---
+.vscode/
+.idea/
+
+# --- VOLUNDR-specific ---
+# Raw personal exports: large, personal, not source code.
+# Kept locally as pipeline input, not tracked in git.
+notion-exports/
+capacities-exports/
+
+# Obsidian vault itself is not part of this repo (path is configured
+# in config.yaml, not stored inside the project).
