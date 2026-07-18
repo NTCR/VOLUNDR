@@ -1,17 +1,26 @@
 [project]
 name = "volundr"
 version = "0.1.0"
-description = ""
+description = "Personal PKM pipeline: enrich markdown drafts into an Obsidian vault."
 authors = [
     {name = "Josep Burgués",email = "ntcr143@protonmail.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "typer (>=0.12,<1.0)",
+    "python-frontmatter (>=1.1,<2.0)",
+    "ruamel.yaml (>=0.18,<1.0)",
 ]
+
+[project.scripts]
+volundr = "volundr.cli:app"
 
 [tool.poetry]
 packages = [{include = "volundr", from = "src"}]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

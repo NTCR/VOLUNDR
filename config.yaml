@@ -1,0 +1,23 @@
+# VÖLUNDR pipeline configuration.
+# Per-run behaviour (--source, --dry-run, --eval) lives on the CLI, not here.
+# Bump `version` by hand when the prompt / model / thresholds change meaningfully;
+# it is stamped into every note as `pipeline: vN` and ties a note back to this file.
+
+# Absolute or ~-relative path to the Obsidian vault. NOT stored inside this repo.
+vault_path: "~/1_PKM/NaitoPKM"
+
+# Local LLM (Ollama). Unused in Stage 1 (deterministic core); wired for Stage 3.
+model: "llama3.1"
+ollama_endpoint: "http://localhost:11434"
+
+# Length thresholds (characters of note body). In Stage 1 these only *flag*
+# outliers in the run report. Tuned for real on the Stage 4 eval harness.
+length:
+  min_chars: 120
+  max_chars: 6000
+
+# Prompt template used by the Stage 3 enrichment call. Not read in Stage 1.
+prompt_file: "prompts/enrich.txt"
+
+# Pipeline version -> `pipeline: v1` frontmatter stamp.
+version: 1
