@@ -13,7 +13,7 @@ from datetime import date
 from pathlib import Path
 
 from volundr.config import Config
-from volundr.frontmatter import render_note
+from volundr.frontmatter_renderer import render_note
 from volundr.models import SourcePage, SourceResult
 from volundr.naming import unique_filename
 from volundr.report import RunReport

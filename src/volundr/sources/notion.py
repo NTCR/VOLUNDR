@@ -9,6 +9,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import frontmatter
+
 from volundr.models import SourcePage
 from volundr.sources.base import (
     discover_markdown,
@@ -16,6 +18,7 @@ from volundr.sources.base import (
     extract_notion_id,
     strip_notion_id,
 )
+from volundr.sources.capacities import _clean_date, _strip_leading_title
 
 
 class NotionSource:
@@ -41,6 +44,7 @@ class NotionSource:
             export_path=export_path_chain(path, root),
             title=title,
             raw_body=body,
+            tags=[],
             native_created=None,  # this export vintage has no date; no mtime fallback
         )
 
@@ -54,16 +58,35 @@ class ManualSource(NotionSource):
 
     def parse(self, path: Path, root: Path) -> SourcePage:
         text = path.read_text(encoding="utf-8")
-        title, body = _split_title(text, fallback=path.stem)
-        return SourcePage(
-            path=path,
-            source=self.name,
-            source_id=path.name,
-            export_path=export_path_chain(path, root),
-            title=title,
-            raw_body=body,
-            native_created=None,
-        )
+        if text.startswith("---"):
+            post = frontmatter.loads(text)
+            meta = post.metadata
+            title = str(meta.get("title") or path.stem).strip()
+            created = _clean_date(meta.get("createdAt") or meta.get("date") or meta.get("created"))
+            body = _strip_leading_title(post.content, title)
+            tags = [str(t).strip() for t in (meta.get("tags") or [])]
+            return SourcePage(
+                path=path,
+                source=self.name,
+                source_id=path.name,
+                export_path=export_path_chain(path, root),
+                title=title,
+                raw_body=body,
+                tags=tags,
+                native_created=created,
+            )
+        else:
+            title, body = _split_title(text, fallback=path.stem)
+            return SourcePage(
+                path=path,
+                source=self.name,
+                source_id=path.name,
+                export_path=export_path_chain(path, root),
+                title=title,
+                raw_body=body,
+                tags=[],
+                native_created=None,
+            )
 
 
 # TODO: same as _strip_leading_title in capacities

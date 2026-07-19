@@ -15,6 +15,7 @@ import typer
 
 from volundr.config import DEFAULT_CONFIG_PATH, load_config
 from volundr import pipeline
+from volundr.harvest import harvest_inbox
 
 app = typer.Typer(
     add_completion=False,
@@ -58,14 +59,23 @@ def run(
         raise typer.Exit(code=1)
 
 
-# ------ PLACEHOLDERS ------
+# ------ STAGE COMMANDS ------
 @app.command()
 def harvest(
-    config_path: Path = typer.Option(DEFAULT_CONFIG_PATH, "--config"),
+    config_path: Path = typer.Option(
+        DEFAULT_CONFIG_PATH, "--config", help="Path to config.yaml."
+    ),
+    source_filter: SourceName = typer.Option(
+        None, "--source", help="Only harvest from a specific source folder (optional)."
+    ),
 ) -> None:
     """Bootstrap the tag vocabulary from the corpus (Stage 2)."""
-    typer.echo("harvest: not implemented yet (Stage 2 — vocabulary bootstrap).")
-    raise typer.Exit(code=2)
+    config = load_config(config_path)
+    from volundr import vault as vault_mod
+    vault_mod.ensure_layout(config.vault_path)
+    
+    source_val = source_filter.value if source_filter else None
+    harvest_inbox(config, source_val)
 
 
 @app.command()

@@ -30,6 +30,7 @@ class CapacitiesSource:
         title = str(meta.get("title") or path.stem).strip()
         created = _clean_date(meta.get("createdAt") or meta.get("date"))
         body = _strip_leading_title(post.content, title)
+        tags = [str(t).strip() for t in (meta.get("tags") or [])]
 
         return SourcePage(
             path=path,
@@ -38,6 +39,7 @@ class CapacitiesSource:
             export_path=export_path_chain(path, root),
             title=title,
             raw_body=body,
+            tags=tags,
             native_created=created,
         )
 

@@ -21,6 +21,7 @@ class SourcePage:
     export_path: str      # path relative to the export root, for the context chain
     title: str            # page title (verbatim)
     raw_body: str         # markdown body below the title (frontmatter/title stripped)
+    tags: list[str] = field(default_factory=list) # source-native human tags
     native_created: str | None = None  # source-native date, or None when absent
 
 

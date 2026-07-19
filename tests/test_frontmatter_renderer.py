@@ -5,7 +5,7 @@ from __future__ import annotations
 import frontmatter
 
 from volundr.models import Note
-from volundr.frontmatter import render_note
+from volundr.frontmatter_renderer import render_note
 
 
 def _note(**kw) -> Note:
